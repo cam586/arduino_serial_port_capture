@@ -18,12 +18,21 @@ file_ext = ".csv"
 file_dir = p.join(save_dir, (file_name + "_" + file_app + file_ext))
 
 # Open the CSV file in append mode
-print (file_dir)
+print ("Saving data to file: " + file_dir)
 with open(file_dir, 'a', newline='') as csvfile:
     writer = csv.writer(csvfile)
 
     # Continuously read data from the serial port
-    while True:
-        line = ser.readline().decode().strip()  # Read a line from the serial port and decode it
-        writer.writerow([line])  # Write the line to the CSV file
+    try: 
+        while True:
+            line = ser.readline().decode().strip()  # Read a line from the serial port and decode it
+            writer.writerow([line])  # Write the line to the CSV file
+    except KeyboardInterrupt:
+        print ("Keyboard Interrupt. Exiting...")
+        ser.close()
+        csvfile.close()
+        print ("Serial port closed")
+        print ("CSV file closed")
+        print ("Exiting program")
+        exit()
 
